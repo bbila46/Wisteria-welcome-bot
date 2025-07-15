@@ -1,5 +1,6 @@
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 require('dotenv').config();
+const http = require('http');
 
 const client = new Client({
   intents: [
@@ -14,6 +15,7 @@ client.once('ready', () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
+// Your existing welcome message code here
 client.on('guildMemberAdd', async (member) => {
   if (member.guild.id !== '1387102987238768783') return;
 
@@ -33,6 +35,15 @@ client.on('guildMemberAdd', async (member) => {
   };
 
   await channel.send({ embeds: [embed] });
+});
+
+// Create a simple HTTP server to keep the app alive on platforms like Render
+const PORT = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Wisteria Medical Institute Bot is running\n');
+}).listen(PORT, () => {
+  console.log(`🌐 Server listening on port ${PORT}`);
 });
 
 client.login(process.env.TOKEN);
